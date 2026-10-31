@@ -30,11 +30,19 @@ def eval_aff_rec(results, truths, exclude_zero=False):
     mult_a3 = multiclass_acc(test_preds_a3, test_truth_a3)
     mult_a5 = multiclass_acc(test_preds_a5, test_truth_a5)
 
-    binary_truth_non0 = test_truth > 0
-    binary_preds_non0 = test_preds > 0
-    f_score_non0 = f1_score(
-        binary_truth_non0, binary_preds_non0, average='weighted')
-    acc_2_non0 = accuracy_score(binary_truth_non0, binary_preds_non0)
+    # The paper defines Acc-2/F1 after excluding ground-truth zeros.
+    # The released implementation previously counted zeros as negative.
+    mask = test_truth != 0
+    if np.any(mask):
+        binary_truth_non0 = test_truth[mask] > 0
+        binary_preds_non0 = test_preds[mask] > 0
+        f_score_non0 = f1_score(
+            binary_truth_non0, binary_preds_non0, average='weighted',
+            zero_division=0)
+        acc_2_non0 = accuracy_score(binary_truth_non0, binary_preds_non0)
+    else:
+        f_score_non0 = float('nan')
+        acc_2_non0 = float('nan')
 
     return {'mae': mae, 'corr': corr, 'acc5': mult_a5, 'acc3': mult_a3, 'f1_n0': f_score_non0, 'acc2_n0': acc_2_non0}
 
@@ -49,9 +57,15 @@ def eval_per_rec(results, truths):
     rmse = np.sqrt(np.mean((test_preds - test_truth) ** 2))
     corr = np.corrcoef(test_preds, test_truth)[0][1]
 
-    binary_truth = test_truth > 0
-    binary_preds = test_preds > 0
-    f_score = f1_score(binary_truth, binary_preds, average='weighted')
-    acc_2 = accuracy_score(binary_truth, binary_preds)
+    mask = test_truth != 0
+    if np.any(mask):
+        binary_truth = test_truth[mask] > 0
+        binary_preds = test_preds[mask] > 0
+        f_score = f1_score(binary_truth, binary_preds, average='weighted',
+                           zero_division=0)
+        acc_2 = accuracy_score(binary_truth, binary_preds)
+    else:
+        f_score = float('nan')
+        acc_2 = float('nan')
 
     return {'mae': mae, 'rmse': rmse, 'corr': corr, 'f1': f_score, 'acc2': acc_2}

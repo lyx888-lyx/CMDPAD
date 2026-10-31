@@ -101,10 +101,10 @@ def main():
         xB = {}
         for m in args.modalities_A:
             key = f"A_{m}"
-            xA[m] = row.get(key, np.zeros(1, dtype=np.float32))
+            xA[m] = row[key]
         for m in args.modalities_B:
             key = f"B_{m}"
-            xB[m] = row.get(key, np.zeros(1, dtype=np.float32))
+            xB[m] = row[key]
             
         # Extract CLS tokens
         clsA = extract_cls_for_row(modelA, xA, device)

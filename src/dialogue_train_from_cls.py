@@ -147,7 +147,7 @@ def train_loop(model, optim, loss_fn, train_loader, valid_loader, test_loader, d
         
         if monitored is not None and monitored < best_val:
             best_val = monitored
-            best_state = {k:v.cpu() for k,v in model.state_dict().items()}
+            best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
             torch.save(best_state, save_path)
             no_improve=0
             improved=True

@@ -222,7 +222,7 @@ def train(args):
         improved = False
         if monitored is not None and monitored < best_val:
             best_val = monitored
-            best_state = {k: v.cpu() for k, v in model.state_dict().items()}
+            best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
             torch.save(best_state, save_path)
             improved = True
             no_improve = 0

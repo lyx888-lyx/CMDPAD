@@ -9,12 +9,12 @@ DATA_DIR = Path("./dataset")
 SAVE_DIR = Path("./saved_models")
 
 # Single-turn Data paths
-FEATURE_PKL = DATA_DIR / "multimodal_features_single_final.pkl"
-LABEL_CSV = DATA_DIR / "label_single_final.csv"
+FEATURE_PKL = DATA_DIR / "multimodal_features_single.pkl"
+LABEL_CSV = DATA_DIR / "label_single.csv"
 
 # Dialogue Data paths
-DIA_FEATURE_PKL = DATA_DIR / "multimodal_features_paired_final.pkl"
-DIA_LABEL_CSV = DATA_DIR / "label_paired_final.csv"
+DIA_FEATURE_PKL = DATA_DIR / "multimodal_features_paired.pkl"
+DIA_LABEL_CSV = DATA_DIR / "label_paired.csv"
 
 # Available modality columns in feature pickle
 AVAILABLE_MODALITIES = [
@@ -67,8 +67,8 @@ DIA_FEATURE_DEFAULTS = {
     "labels": str(DIA_LABEL_CSV),
     "modalities_A": DIALOGUE_DEFAULT_MODALITIES_A,
     "modalities_B": DIALOGUE_DEFAULT_MODALITIES_B,
-    "model_A": str(SAVE_DIR / "personality_recognition__bert-base-chinese_wav2vec2-large-robust-emotion_convnext-base.pt"),
-    "model_B": str(SAVE_DIR / "sentiment_prediction__bert-base-chinese_wav2vec2-large-robust-emotion_convnext-base.pt"),
+    "model_A": str(SAVE_DIR / "affect_recognition__bert-base-chinese_wav2vec2-large-robust-emotion_convnext-base.pt"),
+    "model_B": str(SAVE_DIR / "affect_prediction__bert-base-chinese_wav2vec2-large-xlsr-chinese_convnext-base.pt"),
     "out_cache": str(DATA_DIR / "dialogue_cls_pr_ap.pkl"),
 }
 
@@ -76,11 +76,11 @@ DIA_FEATURE_DEFAULTS = {
 DIA_FEATURE_DEFAULTS_MULTI = {
     "features": str(DIA_FEATURE_PKL),
     "labels": str(DIA_LABEL_CSV),
-    "modalities_A_sent": DIALOGUE_DEFAULT_MODALITIES_A,
+    "modalities_A_aff": DIALOGUE_DEFAULT_MODALITIES_A,
     "modalities_A_per": DIALOGUE_DEFAULT_MODALITIES_A,
     "modalities_B": DIALOGUE_DEFAULT_MODALITIES_B,
-    "model_A_sent": str(SAVE_DIR / "sentiment_recognition__bert-base-chinese_wav2vec2-large-robust-emotion_convnext-base.pt"),
+    "model_A_aff": str(SAVE_DIR / "affect_recognition__bert-base-chinese_wav2vec2-large-robust-emotion_convnext-base.pt"),
     "model_A_per": str(SAVE_DIR / "personality_recognition__bert-base-chinese_wav2vec2-large-robust-emotion_convnext-base.pt"),
-    "model_B": str(SAVE_DIR / "sentiment_prediction__bert-base-chinese_wav2vec2-large-xlsr-chinese_convnext-base.pt"),
+    "model_B": str(SAVE_DIR / "affect_prediction__bert-base-chinese_wav2vec2-large-xlsr-chinese_convnext-base.pt"),
     "out_cache": str(DATA_DIR / "dialogue_cls_multi.pkl"),
 }

@@ -42,7 +42,7 @@ def extract_cls_for_row_multi(models, modal_lists, row, device):
         x_t = {}
         for m in modlist:
             key = f"A_{m}"
-            val = row.get(key, np.zeros(1, dtype=np.float32))
+            val = row[key]
             arr = np.array(val).reshape(1, -1).astype(np.float32)
             x_t[m] = torch.from_numpy(arr).to(device)
             
@@ -59,7 +59,7 @@ def extract_cls_for_single_model(model, modal_list, prefix, row, device):
     x_t = {}
     for m in modal_list:
         key = f"{prefix}_{m}"
-        val = row.get(key, np.zeros(1, dtype=np.float32))
+        val = row[key]
         arr = np.array(val).reshape(1, -1).astype(np.float32)
         x_t[m] = torch.from_numpy(arr).to(device)
         
@@ -135,14 +135,11 @@ def main():
     dims_A = infer_dims_from_feature(paired_df, list(all_A_mods), prefix="A_")
     dims_B = infer_dims_from_feature(paired_df, args.modalities_B, prefix="B_")
     
-    # Combine inferred dimensions
-    dims_all = {**dims_A, **dims_B}
-
-    # Build modality_dims per model
+    # Keep A and B dimensions separate, even for shared modality names.
     modality_dims_list = []
     for ml in modalities_A_list:
-        modality_dims_list.append({m: dims_all[m] for m in ml})
-    modality_dims_B = {m: dims_all[m] for m in args.modalities_B}
+        modality_dims_list.append({m: dims_A[m] for m in ml})
+    modality_dims_B = {m: dims_B[m] for m in args.modalities_B}
     
     print("Inferred dims for A-models:", modality_dims_list)
     print("Inferred dims for B-model:", modality_dims_B)
